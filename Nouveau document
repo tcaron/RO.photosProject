@@ -1,0 +1,6 @@
+X : ensemble des permutations de longueur n (n nb de photos)
+
+
+taille de l'espace de recherche nb de vecteurs : n!
+
+f : x -> R
