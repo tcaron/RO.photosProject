@@ -168,8 +168,8 @@ public class Main {
 		    photoDist[i][j] = (double) d.get(j);
 		}
 	    }
-
-	    /*
+            
+            /*
 	    for(int i = 0; i < photoDist.length; i++) {
 		for(int j = 0; j < photoDist.length; j++) {
 		    System.out.print(" " + photoDist[i][j]);
@@ -210,10 +210,20 @@ public class Main {
 	return sum;
     }
 
+    /* permet de récupérer et de changer le tableau de la meilleur solution pour le HillClimber */
+    public static int [] BestSolHC ;
     
+   public static int[] getBestSolHC(){
+        
+        return Main.BestSolHC;
+    }
     
+    public static void setBestSolHC(int[] newBestSol){
+        
+        Main.BestSolHC = newBestSol;
+    }
     
-    
+    /* Algorithme Hill Cliber First Improvement */
     
     public static double hillClimberFirst(int iteration){
        
@@ -265,19 +275,25 @@ public class Main {
          } 
 
         System.out.println(val);
-       afficheTableau(solFinale);
+       
+       setBestSolHC(solFinale);
+       afficheTableau(Main.getBestSolHC());
         return val;
     }
     
     
     
-    public static double iteratedLocalSearch(int iteration, int swap){
+   /* Algorithme Iterated Local Search */
+    
+    public static double iteratedLocalSearch(int iteration, int swap, int nbIterationHc){
         
         double val = 1000 ;
         int numberOfPhoto = 55;
-	int [] solution = randomize(numberOfPhoto);  
+        hillClimberFirst(nbIterationHc);
+	int [] solution = Main.BestSolHC;  
         int [] solFinale = new int [numberOfPhoto];
         int [] swapSol = new int [numberOfPhoto]; 
+        
         double valFinale = 100000;
         int maxIteration = 0;
         Random dom = new Random();
@@ -383,6 +399,7 @@ public class Main {
 	// compute the fitness
 	System.out.println(eval(solution));
         hillClimberFirst(10000);
+//        iteratedLocalSearch(10000,1000);
     }
 
 
