@@ -211,25 +211,30 @@ public class Main {
     }
 
     /* permet de récupérer et de changer le tableau de la meilleur solution pour le HillClimber */
-    public static int [] BestSolHC ;
+    public int [] BestSolHC ;
     
-   public static int[] getBestSolHC(){
+   public  int[] getBestSolHC(){
         
-        return Main.BestSolHC;
+        return this.BestSolHC;
     }
     
-    public static void setBestSolHC(int[] newBestSol){
+    public void setBestSolHC(int[] newBestSol){
         
-        Main.BestSolHC = newBestSol;
+        this.BestSolHC = newBestSol;
     }
     
     /* Algorithme Hill Cliber First Improvement */
     
-    public static double hillClimberFirst(int iteration){
+    public  double hillClimberFirst(int iteration, int[] solution){
        
         double val = 1000 ;
         int numberOfPhoto = 55;
-	int [] RandomSolution = randomize(numberOfPhoto);  
+        int[] RandomSolution = new int[numberOfPhoto];
+        if (solution == null)
+        {RandomSolution = randomize(numberOfPhoto); }
+       
+        else{RandomSolution = solution;}
+        
         int [] solFinale = new int [numberOfPhoto];
         double valFinale = 100000;
         int maxIteration = 0;
@@ -281,61 +286,50 @@ public class Main {
         return val;
     }
     
-    public static void swapSolution(int[] solution, int nb)
-    {
+    public int[] swapSolution(int[] solution, int nb)
+    {  
+       int[] tabTemp = solution ;
        Random dom = new Random();
        int swapping = dom.nextInt(nb);
        for (int i =0; i<swapping;i++){   
-        int r = dom.nextInt(solution.length);   
-        int d = dom.nextInt(solution.length);
+        int r = dom.nextInt(tabTemp.length);   
+        int d = dom.nextInt(tabTemp.length);
 
-           int tempR = solution[r] ;       
-             int tempD = solution[d];
+           int tempR = tabTemp[r] ;       
+             int tempD = tabTemp[d];
              
-             solution[r] = tempD;
-             solution[d] = tempR; 
+             tabTemp[r] = tempD;
+            tabTemp[d] = tempR; 
        } 
-
+      return tabTemp;
     }
     
     
    /* Algorithme Iterated Local Search */
     
-    public static double iteratedLocalSearch(int iteration, int nbIterationHc, int swap){
+    public  double iteratedLocalSearch(int iteration, int nbIterationHc, int swap){
          
         
-        int numberOfPhoto = 55;
-        double val = hillClimberFirst(nbIterationHc);
-        System.out.print(val);
-	int [] solution = Main.BestSolHC;  
+        int numberOfPhoto = 55;       
+        int [] solution = randomize(numberOfPhoto); ;
+        double val = hillClimberFirst(nbIterationHc,solution);
         double best = 0;
-        //afficheTableau(solution);
         int [] solFinale = new int [numberOfPhoto];
        
         Random dom = new Random();
-           
+            
               int k = 0; 
             
-            
          while ( k<iteration ){
-             
-          int[] swapSol = solution;
          
-         for (int i =0; i<dom.nextInt(swap);i++){   
-         int r = dom.nextInt(numberOfPhoto);   
-         int d = dom.nextInt(numberOfPhoto);
-
-           int tempR = swapSol[r] ;       
-             int tempD = swapSol[d];
-             
-             swapSol[r] = tempD;
-             swapSol[d] = tempR; 
-       }  
+          int[] swapSol = swapSolution(solution,swap);          
+           double resultat = hillClimberFirst(iteration,swapSol);
+            System.out.println(resultat);
   
-             double resultat = eval(swapSol); 
-    
+             //double resultat = eval(swapSol); 
+          
              if (val > resultat) {
-               resultat=best;
+               val = resultat;
 
            } 
             k++;
@@ -344,15 +338,15 @@ public class Main {
          
 
                 
-        //System.out.println(best);
+        System.out.println(val);
       // afficheTableau(solFinale);
        
        
-        return best;
+        return val;
     }
     
     
-    public static void afficheTableau(int [] tableau){
+    public  void afficheTableau(int [] tableau){
         
          for (int i = 0; i< tableau.length;i++){
             
@@ -403,11 +397,13 @@ public class Main {
          
 	for(int i = 0; i < 55; i++)
 	    solution[i] = i;
-
+        Main main = new Main();
 	// compute the fitness
 	//System.out.println(eval(solution));
-        //hillClimberFirst(10000);
-       iteratedLocalSearch(10000,10000,30);
+     //  main.hillClimberFirst(1000,null);
+       main.iteratedLocalSearch(1000,1000,55);
+      //  System.out.println("---------------------------");
+     //  main.afficheTableau(main.getBestSolHC());
     }
 
 
