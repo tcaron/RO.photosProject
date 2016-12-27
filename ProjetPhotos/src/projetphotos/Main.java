@@ -281,23 +281,39 @@ public class Main {
         return val;
     }
     
+    public static void swapSolution(int[] solution, int nb)
+    {
+       Random dom = new Random();
+       int swapping = dom.nextInt(nb);
+       for (int i =0; i<swapping;i++){   
+        int r = dom.nextInt(solution.length);   
+        int d = dom.nextInt(solution.length);
+
+           int tempR = solution[r] ;       
+             int tempD = solution[d];
+             
+             solution[r] = tempD;
+             solution[d] = tempR; 
+       } 
+
+    }
     
     
    /* Algorithme Iterated Local Search */
     
-    public static double iteratedLocalSearch(int iteration, int swap, int nbIterationHc){
+    public static double iteratedLocalSearch(int iteration, int nbIterationHc, int swap){
+         
         
-        double val = 1000 ;
         int numberOfPhoto = 55;
-        hillClimberFirst(nbIterationHc);
+        double val = hillClimberFirst(nbIterationHc);
+        System.out.print(val);
 	int [] solution = Main.BestSolHC;  
+        //afficheTableau(solution);
         int [] solFinale = new int [numberOfPhoto];
-        int [] swapSol = new int [numberOfPhoto]; 
-        
-        double valFinale = 100000;
-        int maxIteration = 0;
+       
         Random dom = new Random();
-               for (int j = 0; j<iteration;j++){
+           
+        for (int j = 0; j<iteration;j++){
             
               boolean ok = false;
               int k = 0; 
@@ -305,28 +321,32 @@ public class Main {
             
          while ( !ok && k<solution.length ){
              
-             int r = dom.nextInt(numberOfPhoto);   
-             int d = dom.nextInt(numberOfPhoto); 
              
-             int tempR = solution[r] ;       
-             int tempD = solution[d];
-             
-             solution[r] = tempD;
-             solution[d] = tempR;
-             
-             double resultat = eval(solution);
+            int[] swapSol = solution;
              
              
-             if (val > resultat) {
+           int r = dom.nextInt(swap);   
+             int d = dom.nextInt(swap); 
+             
+             int tempR = swapSol[r] ;       
+             int tempD = swapSol[d];
+             
+             swapSol[r] = tempD;
+             swapSol[d] = tempR;
+             
+             double resultat = eval(swapSol); 
+             System.out.print(resultat);
+             
+             if (resultat < val) {
                val = resultat;
-              solFinale = solution;
+              solFinale = swapSol;
                ok = true;
            } 
              
            else {
                
-            solution[r] = tempR;
-             solution[d] = tempD;
+             swapSol[r] = tempR;
+             swapSol[d] = tempD;
              
            }
             k++;
@@ -335,11 +355,11 @@ public class Main {
          } 
 
                 
-        System.out.println(val);
-       afficheTableau(solFinale);
+      //  System.out.println(val);
+      // afficheTableau(solFinale);
        
        
-       
+       //System.out.println(val);
         return val;
     }
     
@@ -397,9 +417,9 @@ public class Main {
 	    solution[i] = i;
 
 	// compute the fitness
-	System.out.println(eval(solution));
-        hillClimberFirst(10000);
-//        iteratedLocalSearch(10000,1000);
+	//System.out.println(eval(solution));
+        //hillClimberFirst(10000);
+       iteratedLocalSearch(100000,10000,30);
     }
 
 
