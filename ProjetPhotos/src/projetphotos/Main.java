@@ -274,10 +274,10 @@ public class Main {
              
          } 
 
-        System.out.println(val);
+       // System.out.println(val);
        
        setBestSolHC(solFinale);
-       afficheTableau(Main.getBestSolHC());
+       //afficheTableau(Main.getBestSolHC());
         return val;
     }
     
@@ -308,59 +308,47 @@ public class Main {
         double val = hillClimberFirst(nbIterationHc);
         System.out.print(val);
 	int [] solution = Main.BestSolHC;  
+        double best = 0;
         //afficheTableau(solution);
         int [] solFinale = new int [numberOfPhoto];
        
         Random dom = new Random();
            
-        for (int j = 0; j<iteration;j++){
-            
-              boolean ok = false;
               int k = 0; 
             
             
-         while ( !ok && k<solution.length ){
+         while ( k<iteration ){
              
-             
-            int[] swapSol = solution;
-             
-             
-           int r = dom.nextInt(swap);   
-             int d = dom.nextInt(swap); 
-             
-             int tempR = swapSol[r] ;       
+          int[] swapSol = solution;
+         
+         for (int i =0; i<dom.nextInt(swap);i++){   
+         int r = dom.nextInt(numberOfPhoto);   
+         int d = dom.nextInt(numberOfPhoto);
+
+           int tempR = swapSol[r] ;       
              int tempD = swapSol[d];
              
              swapSol[r] = tempD;
-             swapSol[d] = tempR;
-             
+             swapSol[d] = tempR; 
+       }  
+  
              double resultat = eval(swapSol); 
-             System.out.print(resultat);
-             
-             if (resultat < val) {
-               val = resultat;
-              solFinale = swapSol;
-               ok = true;
+    
+             if (val > resultat) {
+               resultat=best;
+
            } 
-             
-           else {
-               
-             swapSol[r] = tempR;
-             swapSol[d] = tempD;
-             
-           }
             k++;
          }    
              
-         } 
+         
 
                 
-      //  System.out.println(val);
+        //System.out.println(best);
       // afficheTableau(solFinale);
        
        
-       //System.out.println(val);
-        return val;
+        return best;
     }
     
     
@@ -419,7 +407,7 @@ public class Main {
 	// compute the fitness
 	//System.out.println(eval(solution));
         //hillClimberFirst(10000);
-       iteratedLocalSearch(100000,10000,30);
+       iteratedLocalSearch(10000,10000,30);
     }
 
 
