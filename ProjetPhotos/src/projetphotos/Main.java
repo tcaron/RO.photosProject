@@ -71,8 +71,8 @@ public class Main {
      *  Compute the matrice of distance between solutions 
      *                  and of inverse distance between positions 
      */
-    public static void computeDistances(String photoFileName, String albumFileName) {
-	computePhotoDistances(photoFileName);
+    public static void computeDistances(String photoFileName, String albumFileName, String choice) {
+	computePhotoDistances(photoFileName,choice);
 	computeAlbumDistances(albumFileName);
     }
 
@@ -148,7 +148,7 @@ public class Main {
 	}
     }
 
-    public static void computePhotoDistances(String fileName) {
+    public static void computePhotoDistances(String fileName, String choice) {
 	try {
 	    FileReader reader = new FileReader(fileName);
 
@@ -163,9 +163,20 @@ public class Main {
 	    // distance based on the distance between average hash
 	    for(int i = 0; i < array.size(); i++) {
 		JSONObject image = (JSONObject) array.get(i);
-		JSONArray d = (JSONArray) image.get("ahashdist");		
-		for(int j = 0; j < d.size(); j++) {
-		    photoDist[i][j] = (double) d.get(j);
+		JSONArray ahash = (JSONArray) image.get("ahashdist");
+                JSONArray dhash = (JSONArray) image.get("dhashdist");
+                JSONArray phash = (JSONArray) image.get("phashdist");
+               // JSONArray tags = (JSONArray) image.get("tags");
+                
+		for(int j = 0; j < ahash.size(); j++) {
+                    if (choice == "ahashdist")
+                        photoDist[i][j] = (double) ahash.get(j);
+                    
+                    if(choice == "dhashdist" )
+                        photoDist[i][j] = (double) dhash.get(j);
+                    
+                     if(choice == "phashdist" )
+                         photoDist[i][j] = (double) phash.get(j);
 		}
 	    }
             
@@ -209,10 +220,7 @@ public class Main {
 
 	return sum;
     }
-    
-    
-    
-    
+
     
 
     /* permet de récupérer et de changer le tableau de la meilleur solution pour le HillClimber */
@@ -318,11 +326,7 @@ public class Main {
         int numberOfPhoto = 55;
         int[] RandomSol = randomize(numberOfPhoto);
         int [] solution = hillClimberFirst(nbIterationHc,RandomSol);
-        afficheTableau(solution);
         double val = eval(solution);
-        double valFinal = 0;
-        int [] newSol = new int [numberOfPhoto];   
-       // double best = 0;
         int [] solFinale = new int [numberOfPhoto];        
        
       //  Random dom = new Random();
@@ -343,18 +347,10 @@ public class Main {
            } 
          k++;   
          }    
-      
 
-      // System.out.println(val);
-         System.out.println("------");
          System.out.println(val);
-         
-          System.out.println("------");
-          
-         afficheTableau(solFinale);
          System.out.println(eval(solFinale));
-         
-       //afficheTableau(solution));
+
         return solFinale;
     }
     
@@ -401,7 +397,7 @@ public class Main {
 	// readPhotoExample(photoFileName);
 
         
-	computeDistances(photoFileName, albumFileName);
+	computeDistances(photoFileName, albumFileName, "phashdist");
 
 	// one basic solution : order of the index
 
@@ -415,8 +411,8 @@ public class Main {
         
 	// compute the fitness
   //System.out.println(eval(solution));
-     // main.hillClimberFirst(1000,null);
-       main.iteratedLocalSearch(1000,1000,55);
+      main.hillClimberFirst(1000,null);
+      // main.iteratedLocalSearch(100,100,55);
       //  System.out.println("---------------------------");
      //  main.afficheTableau(main.getBestSolHC());
     }
