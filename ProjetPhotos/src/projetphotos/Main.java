@@ -321,34 +321,29 @@ public class Main {
         afficheTableau(solution);
         double val = eval(solution);
         double valFinal = 0;
-        
+        int [] newSol = new int [numberOfPhoto];   
        // double best = 0;
-        int [] solFinale = new int [numberOfPhoto];
-        
-        int[] swapSol = new int [numberOfPhoto];
+        int [] solFinale = new int [numberOfPhoto];        
+       
       //  Random dom = new Random();
             
-              int k = 0; 
-              
-         
+        int k = 0;  
+        
          while ( k<iteration ){  
              
-            swapSol = swapSolution(solution,swap);  
-           int [] current =  hillClimberFirst(nbIterationHc,swapSol);
-           double resultat = eval(current);
-          // afficheTableau(swapSol);
          
-          System.out.println(val+"+ +"+resultat);
-          
-            k++;
+           int [] current =  hillClimberFirst(nbIterationHc, swapSolution(solution,swap));
+           double resultat = eval(current);
+           
           if (resultat < val) {
-             solFinale = current; 
+             
+            solFinale = current.clone(); 
              val = resultat;
           
            } 
-           
+         k++;   
          }    
-
+      
 
       // System.out.println(val);
          System.out.println("------");
@@ -412,7 +407,7 @@ public class Main {
 
 	//int numberOfPhoto = 55;
 	//int [] solution = new int[numberOfPhoto];
-    int solution[] = { 38 ,34 ,24 ,51, 49, 22, 1 ,20, 0 ,33 ,41, 32, 52, 6 ,50, 8, 28, 3 ,5, 48, 43, 42, 2, 36, 14, 26, 25, 37, 30, 46, 7, 17, 40 ,16, 19, 4, 12, 29, 27, 10, 13, 11, 44, 18, 15, 39, 54, 21, 23, 45, 35, 47, 9, 31, 53 };
+   // int solution[] = { 38 ,34 ,24 ,51, 49, 22, 1 ,20, 0 ,33 ,41, 32, 52, 6 ,50, 8, 28, 3 ,5, 48, 43, 42, 2, 36, 14, 26, 25, 37, 30, 46, 7, 17, 40 ,16, 19, 4, 12, 29, 27, 10, 13, 11, 44, 18, 15, 39, 54, 21, 23, 45, 35, 47, 9, 31, 53 };
 	//for(int i = 0; i < 55; i++)
 	  //  solution[i] = i;
         Main main = new Main();
@@ -421,7 +416,7 @@ public class Main {
 	// compute the fitness
   //System.out.println(eval(solution));
      // main.hillClimberFirst(1000,null);
-       main.iteratedLocalSearch(100,100,55);
+       main.iteratedLocalSearch(1000,1000,55);
       //  System.out.println("---------------------------");
      //  main.afficheTableau(main.getBestSolHC());
     }
