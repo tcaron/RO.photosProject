@@ -209,6 +209,11 @@ public class Main {
 
 	return sum;
     }
+    
+    
+    
+    
+    
 
     /* permet de récupérer et de changer le tableau de la meilleur solution pour le HillClimber */
     public int [] BestSolHC ;
@@ -225,7 +230,7 @@ public class Main {
     
     /* Algorithme Hill Cliber First Improvement */
     
-    public  double hillClimberFirst(int iteration, int[] solution){
+    public  int[] hillClimberFirst(int iteration, int[] solution){
        
         double val = 1000 ;
         int numberOfPhoto = 55;
@@ -279,11 +284,11 @@ public class Main {
              
          } 
 
-       // System.out.println(val);
+     //  System.out.println(val);
        
-       setBestSolHC(solFinale);
-       //afficheTableau(Main.getBestSolHC());
-        return val;
+       //setBestSolHC(solFinale);
+        // afficheTableau(solFinale);
+        return solFinale;
     }
     
     public int[] swapSolution(int[] solution, int nb)
@@ -307,42 +312,55 @@ public class Main {
     
    /* Algorithme Iterated Local Search */
     
-    public  double iteratedLocalSearch(int iteration, int nbIterationHc, int swap){
+    public  int[] iteratedLocalSearch(int iteration, int nbIterationHc, int swap){
          
         
-        int numberOfPhoto = 55;       
-        int [] solution = randomize(numberOfPhoto); ;
-        double val = hillClimberFirst(nbIterationHc,solution);
-        double best = 0;
+        int numberOfPhoto = 55;
+        int[] RandomSol = randomize(numberOfPhoto);
+        int [] solution = hillClimberFirst(nbIterationHc,RandomSol);
+        afficheTableau(solution);
+        double val = eval(solution);
+        double valFinal = 0;
+        
+       // double best = 0;
         int [] solFinale = new int [numberOfPhoto];
-       
-        Random dom = new Random();
+        
+        int[] swapSol = new int [numberOfPhoto];
+      //  Random dom = new Random();
             
               int k = 0; 
-            
-         while ( k<iteration ){
+              
          
-          int[] swapSol = swapSolution(solution,swap);          
-           double resultat = hillClimberFirst(iteration,swapSol);
-            System.out.println(resultat);
-  
-             //double resultat = eval(swapSol); 
-          
-             if (val > resultat) {
-               val = resultat;
-
-           } 
-            k++;
-         }    
+         while ( k<iteration ){  
              
+            swapSol = swapSolution(solution,swap);  
+           int [] current =  hillClimberFirst(nbIterationHc,swapSol);
+           double resultat = eval(current);
+          // afficheTableau(swapSol);
          
+          System.out.println(val+"+ +"+resultat);
+          
+            k++;
+          if (resultat < val) {
+             solFinale = current; 
+             val = resultat;
+          
+           } 
+           
+         }    
 
-                
-        System.out.println(val);
-      // afficheTableau(solFinale);
-       
-       
-        return val;
+
+      // System.out.println(val);
+         System.out.println("------");
+         System.out.println(val);
+         
+          System.out.println("------");
+          
+         afficheTableau(solFinale);
+         System.out.println(eval(solFinale));
+         
+       //afficheTableau(solution));
+        return solFinale;
     }
     
     
@@ -392,16 +410,18 @@ public class Main {
 
 	// one basic solution : order of the index
 
-	int numberOfPhoto = 55;
-	int [] solution = new int[numberOfPhoto];
-         
-	for(int i = 0; i < 55; i++)
-	    solution[i] = i;
+	//int numberOfPhoto = 55;
+	//int [] solution = new int[numberOfPhoto];
+    int solution[] = { 38 ,34 ,24 ,51, 49, 22, 1 ,20, 0 ,33 ,41, 32, 52, 6 ,50, 8, 28, 3 ,5, 48, 43, 42, 2, 36, 14, 26, 25, 37, 30, 46, 7, 17, 40 ,16, 19, 4, 12, 29, 27, 10, 13, 11, 44, 18, 15, 39, 54, 21, 23, 45, 35, 47, 9, 31, 53 };
+	//for(int i = 0; i < 55; i++)
+	  //  solution[i] = i;
         Main main = new Main();
+        
+        
 	// compute the fitness
-	//System.out.println(eval(solution));
-     //  main.hillClimberFirst(1000,null);
-       main.iteratedLocalSearch(1000,1000,55);
+  //System.out.println(eval(solution));
+     // main.hillClimberFirst(1000,null);
+       main.iteratedLocalSearch(100,100,55);
       //  System.out.println("---------------------------");
      //  main.afficheTableau(main.getBestSolHC());
     }
