@@ -159,16 +159,18 @@ public class Main {
 	    JSONArray array = (JSONArray) obj;
 
 	    photoDist = new double[array.size()][array.size()];
-
+    
 	    // distance based on the distance between average hash
 	    for(int i = 0; i < array.size(); i++) {
 		JSONObject image = (JSONObject) array.get(i);
 		JSONArray ahash = (JSONArray) image.get("ahashdist");
                 JSONArray dhash = (JSONArray) image.get("dhashdist");
                 JSONArray phash = (JSONArray) image.get("phashdist");
+                
+                JSONArray color = (JSONArray) image.get("color1");
                // JSONArray tags = (JSONArray) image.get("tags");
                 
-		for(int j = 0; j < ahash.size(); j++) {
+		for(int j = 0; j <  color.size(); j++) {
                     if (choice == "ahashdist")
                         photoDist[i][j] = (double) ahash.get(j);
                     
@@ -177,6 +179,9 @@ public class Main {
                     
                      if(choice == "phashdist" )
                          photoDist[i][j] = (double) phash.get(j);
+                     
+                     if(choice == "color")
+                         System.out.println(phash.get(j));
 		}
 	    }
             
@@ -396,22 +401,62 @@ public class Main {
 	// uncomment to test it
 	// readPhotoExample(photoFileName);
 
-        
-	computeDistances(photoFileName, albumFileName, "phashdist");
+       
+	//computeDistances(photoFileName, albumFileName, "color");
 
 	// one basic solution : order of the index
 
 	//int numberOfPhoto = 55;
 	//int [] solution = new int[numberOfPhoto];
    // int solution[] = { 38 ,34 ,24 ,51, 49, 22, 1 ,20, 0 ,33 ,41, 32, 52, 6 ,50, 8, 28, 3 ,5, 48, 43, 42, 2, 36, 14, 26, 25, 37, 30, 46, 7, 17, 40 ,16, 19, 4, 12, 29, 27, 10, 13, 11, 44, 18, 15, 39, 54, 21, 23, 45, 35, 47, 9, 31, 53 };
-	//for(int i = 0; i < 55; i++)
-	  //  solution[i] = i;
-        Main main = new Main();
+	//for(int i = 0; i < 55; i++){
+	//    solution[i] = i;
+       // System.out.println(solution[i]);}
+       // Main main = new Main();
+       // }
         
+      //  for (int j = 1; j<solution.length;j++){
+            
+         //   System.out.println( solution[j-1]+" "+solution[j] );
+         
+            
+       // }
+        try{
+            FileReader reader = new FileReader(photoFileName);
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(reader);
+             JSONArray array = (JSONArray) obj; double sum=0;
+            //System.out.println(obj);
+            for (int i = 0; i< array.size();i++){
+             JSONObject image =  (JSONObject) array.get(i);
+               JSONArray phash = (JSONArray) image.get("phashdist");
+              
+                 sum = sum + (double)phash.get(j) ;
+                // System.out.println(j);
+             }
+           /*  JSONObject colors = (JSONObject) image.get("color1");
+             System.out.print(colors.get("g"));
+              System.out.print(" +++++ ");
+             System.out.print(colors.get("r"));
+              System.out.print(" +++++ ");
+             System.out.print(colors.get("b"));
+             System.out.println();*/
+            }
+            System.out.println(sum/64);
+        } 
+        catch (FileNotFoundException ex) {
+	    ex.printStackTrace();
         
+        }
+         catch(ParseException pe) {	    
+	    System.out.println("position: " + pe.getPosition());
+	    System.out.println(pe);}
+        catch(IOException oe) {	    }
+	   
+       
 	// compute the fitness
   //System.out.println(eval(solution));
-      main.hillClimberFirst(1000,null);
+    //  main.hillClimberFirst(1000,null);
       // main.iteratedLocalSearch(100,100,55);
       //  System.out.println("---------------------------");
      //  main.afficheTableau(main.getBestSolHC());
