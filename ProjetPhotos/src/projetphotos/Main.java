@@ -203,7 +203,7 @@ public class Main {
                
                tagsClasses[i][j] = classes.get(j).toString();
                
-               System.out.println(tagsClasses[i][j]);
+               
                //System.out.println(tagsClasses[i][j]);
                }
    
@@ -310,25 +310,14 @@ public class Main {
       double sum = 0;
       for (int i =0;i<dhash.length-1;i++){
           
-        sum += Math.abs(dhash[solution[i]] + dhash[solution[i+1]]); 
+        sum += Math.abs(dhash[solution[i]] + dhash[solution[i+1]])/2; 
           
       }
       // System.out.println(sum);
        return sum; 
     }
-    static double eval_phash(int [] solution){
-        
-        double sum = 0;
-     for (int i = 0; i<albumInvDist.length;i++){
-      
-         for (int j =i+1;j<albumInvDist.length;j++)
-          sum += (photoDist[solution[i]][solution[j-1]] - photoDist[ solution[i]] [solution[j]]);
-        
-     }   
-       return sum; 
-    }
-    
-    
+
+       
     static double eval_tags(int[]solution){
         double sum=0;
         double diff = 0;  
@@ -339,16 +328,15 @@ public class Main {
                  String[]photo2 =new String[tagsClasses[i].length];
             
              for (int j = 0; j<tagsClasses[solution[i]].length;j++){  
-               
-                 System.out.println(tagsClasses[solution[i]][solution[j]]);
+            
                  photo1[i] = tagsClasses[solution[i]][solution[j]];
                  
                  
                  photo2[i] = tagsClasses[solution[i+1]][solution[j]];
                  // System.out.println(photo1[i]);
-                  if ( photo2[i] != photo1[i] )
+                  if ( photo2[i] != photo1[i])
                   diff ++;
-                  sum +=  (diff/photo2.length);
+                  sum +=  Math.abs(diff/photo2.length);
                         
               
              } 
@@ -367,11 +355,11 @@ public class Main {
        for (int i = 0; i<colorsDist.length-1;i++){
        
            
-           System.out.println(colorsDist[i]);
-         sum += (colorsDist[solution[i]]+colorsDist[solution[i+1]])/2;
+        
+         sum += (colorsDist[solution[i]]+colorsDist[solution[i+1]])/solution.length;
         
      }   
-    
+       
        return sum; 
         
     }
@@ -391,30 +379,19 @@ public class Main {
 
 	
         Algo algo = new Algo();
-       
-        Main main = new Main();
-        
-       
+           
         computeTagsDistance(photoFileName);
 	computeDistances(photoFileName, albumFileName);
         computeGreyAvg(photoFileName);
         computeDHash(photoFileName);
-	// one basic solution : order of the index
-        
-	int numberOfPhoto = 55;
-	int [] solution = new int[numberOfPhoto];
-   int solution2[] = { 29 ,24 ,34 ,51, 49, 38, 1 ,20, 52 ,6 ,41, 32, 0, 33 ,50, 8, 28, 3 ,5, 48, 43, 42, 2, 36, 14, 26, 25, 37, 30, 46, 7, 17, 40 ,16, 19, 4, 12, 29, 27, 10, 13, 11, 44, 18, 15, 39, 54, 21, 23, 45, 35, 47, 9, 31, 53};
-    for(int i = 0; i < 55; i++){
-	 solution[i] = i;
-      } 
-    
-    
-   // algo.hillClimberFirst(10000, solution);
-   // System.out.println(eval_color1(solution));
-    //System.out.println(eval_dhash(solution));
-   System.out.println(eval_tags(solution));
-    }
+       
+
+      for (int i=0;i<100;i++)
+       algo.iteratedLocalSearch(100, 1000, 55);
+ 
 
 
+
+}
 
 }
